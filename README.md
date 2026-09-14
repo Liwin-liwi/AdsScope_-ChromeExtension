@@ -108,4 +108,4 @@ adscope-extension/
 
 ## License
 
-[MIT](LICENSE) © Learnyst
+[MIT](LICENSE) © Liwin

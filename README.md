@@ -2,6 +2,10 @@
 
 A Chrome extension (like AdLens / AdLibSpy) that overlays competitor-ad metrics **directly on top of the [Meta Ad Library](https://www.facebook.com/ads/library/)** as you browse. Built for the Learnyst marketing team to spy on edtech competitors.
 
+![AdScope overlaid on the Meta Ad Library — a green info card on each ad with days running, per-day budget, estimated spend and views, plus a summary panel and toolbar](preview/screenshot.png)
+
+> _Mock preview of the in-page UI. Days running is real; spend, views and per-day budget are transparent estimates (see below)._
+
 It injects a green **info card stacked on top of every ad** (in normal flow, so it never overlaps Meta's own card), a **summary panel** (top-right), and a **toolbar** — mirroring the "Ads Library Tracker" layout. Each card shows:
 
 | Metric | What it is | Source |
@@ -101,3 +105,7 @@ adscope-extension/
 - Works on the **public** Ad Library — you don't need to be logged in, but heavy/fast scrolling can make Meta rate-limit or show a CAPTCHA (that's Meta, not the extension).
 - Inactive commercial ads disappear from the library outside the EU the moment a campaign stops — there's no historical archive for them.
 - This is an unpacked/dev extension for internal use. Automated access to Meta surfaces is against Meta's Terms of Service; use responsibly for manual competitive research.
+
+## License
+
+[MIT](LICENSE) © Learnyst

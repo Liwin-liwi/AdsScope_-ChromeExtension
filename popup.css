@@ -1,0 +1,139 @@
+:root {
+  --bg: #0f1322;
+  --card: #171c2e;
+  --card-2: #1e2439;
+  --line: #2a3150;
+  --text: #eef2ff;
+  --muted: #9aa4bf;
+  --brand: #4fba58;
+  --brand-2: #002fa7;
+  --amber: #f5a623;
+  --radius: 12px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  width: 320px;
+  margin: 0;
+  padding: 12px;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 13px;
+}
+
+.hidden { display: none !important; }
+
+/* Header */
+.hdr {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.logo { display: flex; align-items: center; gap: 8px; }
+.logo .dot {
+  width: 12px; height: 12px; border-radius: 50%;
+  background: var(--brand);
+}
+.logo .name { font-weight: 800; font-size: 16px; letter-spacing: 0.02em; }
+
+/* Toggle switch */
+.switch { position: relative; display: inline-block; width: 40px; height: 22px; }
+.switch input { opacity: 0; width: 0; height: 0; }
+.slider {
+  position: absolute; inset: 0; cursor: pointer;
+  background: var(--line); border-radius: 22px; transition: 0.2s;
+}
+.slider::before {
+  content: ""; position: absolute; height: 16px; width: 16px;
+  left: 3px; bottom: 3px; background: #fff; border-radius: 50%; transition: 0.2s;
+}
+.switch input:checked + .slider { background: var(--brand); }
+.switch input:checked + .slider::before { transform: translateX(18px); }
+
+/* Cards */
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 12px;
+  margin-bottom: 10px;
+}
+
+.section-title {
+  font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--muted); font-weight: 700; margin-bottom: 10px;
+}
+
+/* Summary stats */
+.stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.stat {
+  background: var(--card-2); border-radius: 10px; padding: 10px;
+  text-align: center;
+}
+.stat-val { font-size: 20px; font-weight: 800; line-height: 1.1; }
+.stat-lbl { font-size: 11px; color: var(--muted); margin-top: 3px; }
+
+.longest {
+  margin-top: 10px; padding: 8px 10px; border-radius: 10px;
+  background: rgba(79, 186, 88, 0.12);
+  border: 1px solid rgba(79, 186, 88, 0.3);
+  font-size: 12px;
+}
+.longest b { color: var(--brand); }
+
+.row-btns { display: flex; gap: 8px; margin-top: 10px; }
+
+/* Buttons */
+.btn {
+  flex: 1;
+  padding: 9px 10px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: var(--card-2);
+  color: var(--text);
+  font-size: 12px; font-weight: 600;
+  cursor: pointer;
+  transition: 0.15s;
+}
+.btn:hover { background: #262d47; }
+.btn.primary { background: var(--brand); color: #06210a; border-color: var(--brand); }
+.btn.primary:hover { filter: brightness(1.05); }
+
+/* Fields */
+.field { margin-bottom: 10px; }
+.field label { display: block; font-size: 11px; color: var(--muted); margin-bottom: 5px; }
+.field input[type="number"] {
+  width: 100%; padding: 8px 10px; border-radius: 9px;
+  border: 1px solid var(--line); background: var(--card-2);
+  color: var(--text); font-size: 13px;
+}
+.field input:focus { outline: none; border-color: var(--brand); }
+
+/* Segmented currency control */
+.seg { display: flex; gap: 6px; }
+.seg-btn {
+  flex: 1; padding: 8px; border-radius: 9px;
+  border: 1px solid var(--line); background: var(--card-2);
+  color: var(--muted); font-weight: 700; cursor: pointer; font-size: 12px;
+}
+.seg-btn.active { background: var(--brand); color: #06210a; border-color: var(--brand); }
+
+.toggles { display: flex; gap: 12px; margin-top: 4px; }
+.chk { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); cursor: pointer; }
+.chk input { accent-color: var(--brand); }
+
+/* Note / honesty box */
+.note { background: rgba(245, 166, 35, 0.08); border-color: rgba(245, 166, 35, 0.3); }
+.note-title { font-weight: 700; margin-bottom: 6px; color: var(--amber); }
+.note p { margin: 6px 0; color: #d7ddf0; line-height: 1.45; font-size: 12px; }
+.note u { text-decoration: underline; }
+
+/* Offsite */
+.offsite { text-align: center; }
+.offsite .big { font-weight: 700; font-size: 14px; margin: 4px 0 6px; }
+.muted { color: var(--muted); font-size: 12px; margin: 0 0 12px; }
+
+.ftr { text-align: center; color: var(--muted); font-size: 10px; margin-top: 4px; }

@@ -1,0 +1,11 @@
+# OS junk
+.DS_Store
+Thumbs.db
+
+# editor
+.vscode/
+.idea/
+
+# node (not used by the extension, but just in case)
+node_modules/
+npm-debug.log*

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="popup.css" />
+  <title>AdScope</title>
+</head>
+<body>
+  <header class="hdr">
+    <div class="logo">
+      <span class="dot"></span>
+      <span class="name">AdScope</span>
+    </div>
+    <label class="switch" title="Turn the overlay on/off">
+      <input type="checkbox" id="enabled" checked />
+      <span class="slider"></span>
+    </label>
+  </header>
+
+  <!-- Shown when NOT on the ad library -->
+  <section id="offsite" class="card offsite hidden">
+    <p class="big">Open the Meta Ad Library to start.</p>
+    <p class="muted">AdScope overlays metrics on each ad card while you browse competitor ads.</p>
+    <button id="openLibrary" class="btn primary">Open Meta Ad Library</button>
+  </section>
+
+  <!-- Live summary -->
+  <section id="summary" class="card">
+    <div class="stat-grid">
+      <div class="stat">
+        <div class="stat-val" id="s-count">0</div>
+        <div class="stat-lbl">ads scanned</div>
+      </div>
+      <div class="stat">
+        <div class="stat-val" id="s-avg">0</div>
+        <div class="stat-lbl">avg days live</div>
+      </div>
+      <div class="stat">
+        <div class="stat-val" id="s-spend">—</div>
+        <div class="stat-lbl">total est. spend</div>
+      </div>
+      <div class="stat">
+        <div class="stat-val" id="s-views">—</div>
+        <div class="stat-lbl">total est. views</div>
+      </div>
+    </div>
+    <div id="longest" class="longest hidden"></div>
+    <div class="row-btns">
+      <button id="rescan" class="btn">↻ Rescan page</button>
+      <button id="export" class="btn">⤓ Export CSV</button>
+    </div>
+  </section>
+
+  <!-- Estimation assumptions -->
+  <section class="card">
+    <div class="section-title">Estimation assumptions</div>
+    <div class="field">
+      <label>Currency</label>
+      <div class="seg" id="currency">
+        <button data-cur="INR" class="seg-btn active">₹ INR</button>
+        <button data-cur="USD" class="seg-btn">$ USD</button>
+      </div>
+    </div>
+    <div class="field">
+      <label>Assumed daily budget / ad <span id="cur-sym1">₹</span></label>
+      <input type="number" id="dailyBudget" min="1" step="1" value="650" />
+    </div>
+    <div class="field">
+      <label>Assumed CPM (cost per 1,000 views) <span id="cur-sym2">₹</span></label>
+      <input type="number" id="cpm" min="0.1" step="0.5" value="150" />
+    </div>
+    <div class="toggles">
+      <label class="chk"><input type="checkbox" id="showSpend" checked /> Show est. spend</label>
+      <label class="chk"><input type="checkbox" id="showViews" checked /> Show est. views</label>
+    </div>
+  </section>
+
+  <!-- Honesty box -->
+  <section class="card note">
+    <div class="note-title">📌 What's real vs. estimated</div>
+    <p><b>Days running</b> is <b>real</b> — read straight from Meta's "Started running on" date.</p>
+    <p><b>Spend</b> and <b>views</b> are <b>estimates</b>. Meta does <u>not</u> publish spend or impressions for ordinary commercial ads (only for political / social-issue ads). AdScope models them from days-live × your assumed budget, so tune the assumptions above to your market. Treat them as relative signals, not exact figures.</p>
+  </section>
+
+  <footer class="ftr">AdScope · reads only the public Meta Ad Library · no data leaves your browser</footer>
+
+  <script src="popup.js"></script>
+</body>
+</html>

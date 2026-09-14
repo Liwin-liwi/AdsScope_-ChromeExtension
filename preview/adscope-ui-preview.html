@@ -1,0 +1,310 @@
+<!doctype html><html><head><meta charset="utf-8"><title>AdScope UI preview</title><style>
+ body{margin:0;background:#f0f2f5;font-family:Helvetica,Arial,sans-serif;color:#050505}
+ .nav{height:52px;background:#fff;border-bottom:1px solid #dadde1;display:flex;align-items:center;padding:0 16px;font-weight:800;color:#1877f2}
+ .main{padding:16px 20px} .results{font-size:22px;font-weight:800;margin:6px 0} .subtitle{color:#65676b;font-size:14px;margin-bottom:8px}
+ .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;align-items:start;max-width:1080px}
+ .fbcard{background:#fff;border:1px solid #dadde1;border-radius:12px;padding:14px}
+ .st{color:#31a24c;font-weight:700;font-size:13px} .st.off{color:#8a8d91}
+ .m{color:#65676b;font-size:12px;margin:3px 0} .pr a{color:#050505;font-weight:700;font-size:14px;text-decoration:none}
+ .cp{font-size:13px;margin:8px 0} .cr{height:120px;border-radius:8px;background:linear-gradient(135deg,#4FBA58,#002FA7);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700}
+ .mv{margin-top:8px;color:#65676b;font-size:12px}
+/* ============================================================================
+ * AdScope — in-page UI injected into the Meta Ad Library.
+ * Replicates the "Ads Library Tracker" look: a white/green info card stacked in
+ * normal flow on top of each ad, a top-right summary panel, a toolbar, a modal.
+ * All values set explicitly so Meta's styles don't bleed in.
+ * ==========================================================================*/
+
+.adscope-panel,
+.adscope-panel *,
+#adscope-summary,
+#adscope-summary *,
+#adscope-toolbar,
+#adscope-toolbar *,
+#adscope-modal,
+#adscope-modal * {
+  box-sizing: border-box;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* --------------------------- per-ad stacked card ------------------------- */
+.adscope-panel {
+  display: block;
+  width: 100%;
+  margin: 0 0 10px;
+  padding: 10px 12px 11px;
+  background: #ffffff;
+  color: #1c1e21;
+  border: 1px solid #dfe3e8;
+  border-radius: 10px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  line-height: 1.35;
+  text-align: left;
+}
+/* longevity is conveyed by the "Running X days" badge colour (below), like the
+   reference tracker — no accent border, so nothing clashes with the corners */
+
+.adscope-p-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 7px;
+}
+.adscope-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: #1f9d55;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  padding: 4px 9px;
+  border-radius: 7px;
+}
+.adscope-brand::before {
+  content: "";
+  width: 7px; height: 7px; border-radius: 50%;
+  background: #fff;
+}
+.adscope-run {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #fff;
+  background: #1f9d55;
+  padding: 4px 10px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+.adscope-panel.adscope-mid .adscope-run { background: #f5a623; }
+.adscope-panel.adscope-new .adscope-run { background: #8a94a6; }
+.adscope-run.adscope-run-off { background: #8a94a6; }
+
+.adscope-adv {
+  font-size: 13px;
+  color: #1c1e21;
+  margin-bottom: 3px;
+}
+.adscope-adv b { font-weight: 700; }
+.adscope-adv-ico { filter: grayscale(0.1); }
+.adscope-adv-count { color: #65676b; font-weight: 600; }
+
+.adscope-sub {
+  font-size: 12px;
+  color: #65676b;
+  margin: 1px 0;
+}
+
+.adscope-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 7px;
+  margin: 9px 0 8px;
+}
+.adscope-tile {
+  background: #f0f2f5;
+  border-radius: 8px;
+  padding: 7px 4px;
+  text-align: center;
+}
+.adscope-tv { font-size: 14px; font-weight: 800; color: #111; }
+.adscope-tl { font-size: 11px; color: #65676b; margin-top: 2px; }
+.adscope-tile.adscope-real { background: #e7f7ec; }
+.adscope-tile.adscope-real .adscope-tv { color: #1f8f4c; }
+.adscope-tile.adscope-real .adscope-tl { color: #1f8f4c; }
+
+.adscope-board {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.adscope-select {
+  flex: 1;
+  min-width: 0;
+  padding: 6px 8px;
+  font-size: 12px;
+  color: #1c1e21;
+  background: #fff;
+  border: 1px solid #ccd0d5;
+  border-radius: 7px;
+}
+.adscope-plus,
+.adscope-info {
+  width: 30px; height: 30px;
+  flex: none;
+  border: 1px solid #ccd0d5;
+  background: #fff;
+  color: #444;
+  border-radius: 7px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.adscope-save {
+  padding: 6px 14px;
+  border: 1px solid #1f9d55;
+  background: #1f9d55;
+  color: #fff;
+  border-radius: 7px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.adscope-save.is-saved { background: #157a41; border-color: #157a41; }
+.adscope-plus:hover, .adscope-info:hover { background: #f0f2f5; }
+
+/* "Show All Ad Spend" toggle hides all metric tiles */
+html.adscope-hide-money .adscope-grid { display: none; }
+
+/* ----------------------------- summary panel ---------------------------- */
+#adscope-summary {
+  position: fixed;
+  top: 74px;
+  right: 16px;
+  width: 264px;
+  z-index: 2147483200;
+  background: #fff;
+  color: #1c1e21;
+  border: 1px solid #d6dbe0;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+  overflow: hidden;
+}
+#adscope-summary .as-head {
+  display: flex; align-items: center; justify-content: space-between;
+  background: #157a41; color: #fff;
+  padding: 9px 12px;
+  font-size: 13px; font-weight: 700;
+}
+#adscope-summary .as-close {
+  background: transparent; border: 0; color: #fff;
+  font-size: 14px; cursor: pointer; line-height: 1; padding: 2px 4px;
+}
+#adscope-summary .as-body { padding: 11px 12px 12px; }
+#adscope-summary .as-row { font-size: 12.5px; color: #3a3d42; margin: 5px 0; }
+#adscope-summary .as-row b { color: #111; font-weight: 800; }
+#adscope-summary .as-note {
+  margin-top: 10px; padding: 8px 9px;
+  background: #fff8e1; border: 1px solid #ffe08a; border-radius: 8px;
+  font-size: 11.5px; line-height: 1.4; color: #7a5b00;
+}
+
+/* ------------------------------- toolbar -------------------------------- */
+#adscope-toolbar {
+  display: flex; align-items: center; flex-wrap: wrap; gap: 8px;
+  padding: 9px 12px;
+  margin: 10px 0;
+  background: #eaf7ee;
+  border: 1px solid #cfe9d6;
+  border-radius: 10px;
+}
+#adscope-toolbar.as-tb-float {
+  position: fixed; top: 70px; left: 50%; transform: translateX(-50%);
+  z-index: 2147483200; margin: 0; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
+}
+#adscope-toolbar .as-tb-label { font-size: 13px; font-weight: 800; color: #157a41; }
+#adscope-toolbar .as-tb-btn {
+  padding: 7px 12px;
+  border: 1px solid #cfd8dc;
+  background: #fff; color: #1c1e21;
+  border-radius: 8px;
+  font-size: 12.5px; font-weight: 600; cursor: pointer;
+}
+#adscope-toolbar .as-tb-btn.primary { background: #1f9d55; color: #fff; border-color: #1f9d55; }
+#adscope-toolbar .as-tb-btn.off { opacity: 0.55; }
+#adscope-toolbar .as-tb-btn:hover { filter: brightness(0.98); }
+
+/* ---------------------------- table modal ------------------------------- */
+#adscope-modal {
+  position: fixed; inset: 0; z-index: 2147483600;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex; align-items: center; justify-content: center;
+  padding: 20px;
+}
+#adscope-modal .as-modal-card {
+  width: min(900px, 94vw); max-height: 84vh;
+  background: #fff; color: #1c1e21;
+  border-radius: 12px; overflow: hidden;
+  display: flex; flex-direction: column;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+}
+#adscope-modal .as-modal-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 16px; border-bottom: 1px solid #e4e6eb;
+  font-size: 14px; font-weight: 800;
+}
+#adscope-modal .as-dl {
+  padding: 7px 12px; margin-right: 8px;
+  background: #1f9d55; color: #fff; border: 0; border-radius: 8px;
+  font-size: 12.5px; font-weight: 700; cursor: pointer;
+}
+#adscope-modal .as-modal-close {
+  background: transparent; border: 0; font-size: 16px; cursor: pointer; color: #444;
+}
+#adscope-modal .as-modal-body { overflow: auto; }
+#adscope-modal .as-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+#adscope-modal .as-table th {
+  position: sticky; top: 0; background: #f0f2f5; text-align: left;
+  padding: 9px 10px; font-weight: 700; border-bottom: 1px solid #dfe3e8;
+}
+#adscope-modal .as-table td { padding: 8px 10px; border-top: 1px solid #eef0f2; }
+#adscope-modal .as-table td.num { text-align: right; font-variant-numeric: tabular-nums; }
+#adscope-modal .as-table tbody tr:hover { background: #f7f9fb; }
+#adscope-modal .as-modal-foot {
+  padding: 9px 16px; border-top: 1px solid #e4e6eb;
+  font-size: 11.5px; color: #65676b;
+}
+</style></head><body>
+ <div class="nav">Meta &nbsp; Ad Library</div>
+ <div class="main"><div class="results">~12,000 results</div><div id="adscope-toolbar" style="position:static"><span class="as-tb-label">🚩 AdScope:</span>
+  <button class="as-tb-btn primary">👁 Show All Ad Spend</button><button class="as-tb-btn">▽ Longevity filter</button>
+  <button class="as-tb-btn primary">▦ Table View</button><button class="as-tb-btn">⚙ Settings</button></div>
+ <div class="subtitle">These results include ads that match your keyword search.</div>
+ <div class="grid"><div class="cell"><div class="fbcard"><div class="adscope-panel adscope-win" data-adscope-badge="1">
+      <div class="adscope-p-head"><span class="adscope-brand">AdScope</span>
+        <span class="adscope-run ">▶ Running 70.9 days</span></div>
+      <div class="adscope-adv">⭐ <span class="adscope-adv-ico">👤</span> <b>Amazon India</b>
+        <span class="adscope-adv-count">— 2 ads live now</span></div>
+      <div class="adscope-sub">Library ID: 1421850649779114</div>
+      <div class="adscope-sub">Started 06 Jul 2026 · active 70.9 days</div>
+      <div class="adscope-grid"><div class="adscope-tile adscope-est"><div class="adscope-tv">₹878/day</div><div class="adscope-tl">per-day budget</div></div><div class="adscope-tile adscope-est"><div class="adscope-tv">₹62K</div><div class="adscope-tl">est. spend</div></div><div class="adscope-tile adscope-est"><div class="adscope-tv">414.8K</div><div class="adscope-tl">est. views</div></div></div>
+      <div class="adscope-board"><select class="adscope-select"><option>Default Board</option></select>
+        <button class="adscope-plus">+</button><button class="adscope-save">Save</button><button class="adscope-info">ⓘ</button></div>
+    </div><div class="st ">Active</div>
+      <div class="m"><span>Library ID: </span><span>1421850649779114</span></div>
+      <div class="m">Started running on 6 Jul 2026</div>
+      <div class="pr"><a href="#">Amazon India</a></div>
+      <div class="cp">Grab UGC creator deals this season.</div><div class="cr">AD CREATIVE</div><div class="mv">This ad has multiple versions</div></div></div><div class="cell"><div class="fbcard"><div class="adscope-panel adscope-win" data-adscope-badge="1">
+      <div class="adscope-p-head"><span class="adscope-brand">AdScope</span>
+        <span class="adscope-run ">▶ Running 124.9 days</span></div>
+      <div class="adscope-adv">⭐ <span class="adscope-adv-ico">👤</span> <b>Learning Routes</b>
+        <span class="adscope-adv-count">— 3 ads live now</span></div>
+      <div class="adscope-sub">Library ID: 2594177477745970</div>
+      <div class="adscope-sub">Started 13 May 2026 · active 124.9 days</div>
+      <div class="adscope-grid"><div class="adscope-tile adscope-est"><div class="adscope-tv">₹650/day</div><div class="adscope-tl">per-day budget</div></div><div class="adscope-tile adscope-est"><div class="adscope-tv">₹81K</div><div class="adscope-tl">est. spend</div></div><div class="adscope-tile adscope-est"><div class="adscope-tv">541.3K</div><div class="adscope-tl">est. views</div></div></div>
+      <div class="adscope-board"><select class="adscope-select"><option>Default Board</option></select>
+        <button class="adscope-plus">+</button><button class="adscope-save">Save</button><button class="adscope-info">ⓘ</button></div>
+    </div><div class="st ">Active</div>
+      <div class="m"><span>Library ID: </span><span>2594177477745970</span></div>
+      <div class="m">Started running on 13 May 2026</div>
+      <div class="pr"><a href="#">Learning Routes</a></div>
+      <div class="cp">Crack your bank exam in 90 days.</div><div class="cr">AD CREATIVE</div></div></div><div class="cell"><div class="fbcard"><div class="adscope-panel adscope-new" data-adscope-badge="1">
+      <div class="adscope-p-head"><span class="adscope-brand">AdScope</span>
+        <span class="adscope-run adscope-run-off">⏸ Inactive · 59.0d</span></div>
+      <div class="adscope-adv">⭐ <span class="adscope-adv-ico">👤</span> <b>Voter Awareness Org</b>
+        <span class="adscope-adv-count">— 1 ad live now</span></div>
+      <div class="adscope-sub">Library ID: 1759723198713752</div>
+      <div class="adscope-sub">Started 01 Jan 2026 · active 59.0 days</div>
+      <div class="adscope-grid"><div class="adscope-tile adscope-est"><div class="adscope-tv">₹650/day</div><div class="adscope-tl">per-day budget</div></div><div class="adscope-tile adscope-real"><div class="adscope-tv">₹40,000 - ₹44,999</div><div class="adscope-tl">spend (real)</div></div><div class="adscope-tile adscope-real"><div class="adscope-tv">30K - 35K</div><div class="adscope-tl">impressions (real)</div></div></div>
+      <div class="adscope-board"><select class="adscope-select"><option>Default Board</option></select>
+        <button class="adscope-plus">+</button><button class="adscope-save">Save</button><button class="adscope-info">ⓘ</button></div>
+    </div><div class="st off">Inactive</div>
+      <div class="m"><span>Library ID: </span><span>1759723198713752</span></div>
+      <div class="m">Started running on 1 Jan 2026</div>
+      <div class="pr"><a href="#">Voter Awareness Org</a></div>
+      <div class="cp">Public awareness campaign.</div><div class="cr">AD CREATIVE</div></div></div></div></div><div id="adscope-summary"><div class="as-head"><span class="as-title">🚩 AdScope Tracker</span><button class="as-close">✕</button></div>
+  <div class="as-body"><div class="as-row">Total ads scanned: <b>30</b></div><div class="as-row">Avg. days running: <b>89</b></div>
+  <div class="as-row">Avg. per-day budget: <b>₹764/day</b></div><div class="as-row">Est. total spend (all ads): <b>₹9.3L – ₹27.8L</b></div>
+  <div class="as-row">Total est. views: <b>~7M</b></div>
+  <div class="as-note">⚠️ Spend, views &amp; per-day budget are <b>estimates</b> — Meta doesn't publish them for commercial ads. Model: days × budget × variations. Days running is real.</div></div></div></body></html>
